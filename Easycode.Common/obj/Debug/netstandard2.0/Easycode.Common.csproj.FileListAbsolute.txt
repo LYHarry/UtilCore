@@ -1,0 +1,9 @@
+E:\项目\UtilCore\Easycode.Common\bin\Debug\netstandard2.0\Easycode.Common.deps.json
+E:\项目\UtilCore\Easycode.Common\bin\Debug\netstandard2.0\Easycode.Common.dll
+E:\项目\UtilCore\Easycode.Common\bin\Debug\netstandard2.0\Easycode.Common.pdb
+E:\项目\UtilCore\Easycode.Common\obj\Debug\netstandard2.0\Easycode.Common.csproj.CoreCompileInputs.cache
+E:\项目\UtilCore\Easycode.Common\obj\Debug\netstandard2.0\Easycode.Common.AssemblyInfoInputs.cache
+E:\项目\UtilCore\Easycode.Common\obj\Debug\netstandard2.0\Easycode.Common.AssemblyInfo.cs
+E:\项目\UtilCore\Easycode.Common\obj\Debug\netstandard2.0\Easycode.Common.dll
+E:\项目\UtilCore\Easycode.Common\obj\Debug\netstandard2.0\Easycode.Common.pdb
+E:\项目\UtilCore\Easycode.Common\bin\Debug\netstandard2.0\Easycode.Common.xml
