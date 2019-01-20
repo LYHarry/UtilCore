@@ -10,8 +10,4 @@
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>
