@@ -7,8 +7,17 @@ namespace Easycode.DEncrypt
     /// <summary>
     /// RSA 加密算法
     /// </summary>
-    public class RSAAlgo
+    public class RSACipher
     {
+        public static string Encrypt(string source)
+        {
+
+        }
+
+        public static string Decrypt(string source)
+        {
+
+        }
 
     }
 }

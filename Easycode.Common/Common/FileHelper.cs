@@ -9,5 +9,6 @@ namespace Easycode.Common
     /// </summary>
     public class FileHelper
     {
+
     }
 }
