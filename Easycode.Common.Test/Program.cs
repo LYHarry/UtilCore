@@ -8,12 +8,12 @@ namespace Easycode.Common.Test
     {
         static void Main(string[] args)
         {
-            var str = "Program";
 
+            for (int i = 0; i < 200; i++)
+            {
+                Console.WriteLine("TickCount:{0}", RandomHelper.RandString(RandomHelper.LowerCase, 6));
+            }
 
-            var ab = new { a = "Program", b = 1 };
-
-            var pass = MD5Cipher.Encrypt(ab.a);
 
             Console.ReadKey();
         }
