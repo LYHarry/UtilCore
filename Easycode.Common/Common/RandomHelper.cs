@@ -33,81 +33,110 @@ namespace Easycode.Common
         /// <summary>
         /// 大小写字母表
         /// </summary>
-        public static string Alphabet { get { return LowerCase + UpperCase; } }
+        public static string Alphabet
+        {
+            get
+            {
+                return LowerCase + UpperCase;
+            }
+        }
 
         /// <summary>
         /// 大小写字母数字集
         /// </summary>
-        public static string Alphanumeric { get { return Number + LowerCase + UpperCase; } }
+        public static string Alphanumeric
+        {
+            get
+            {
+                return Number + LowerCase + UpperCase;
+            }
+        }
 
 
         /// <summary>
-        /// 随机得到字符串
+        /// 得到随机字符串
         /// </summary>
-        /// <param name="source">基数字符串（通过该字符串产生随机字符串）</param>
+        /// <param name="source">基数字符串(通过该字符串产生随机字符串)</param>
         /// <param name="len">字符串长度</param>
+        /// <param name="filter">需要过滤的字符串</param>
         /// <returns>返回随机字符串</returns>
-        public static string RandString(string source, int len)
+        public static string RandString(string source, int len, params string[] filter)
         {
             if (string.IsNullOrWhiteSpace(source))
                 return string.Empty;
             if (len < 1)
                 return string.Empty;
+            if (filter != null && filter.Length > 0)
+            {
+                foreach (var item in filter)
+                    source = source.Replace(item, "");
+            }
             StringBuilder res = new StringBuilder();
             for (int i = 0; i < len; i++)
                 res.Append(source[_rand.Next(source.Length)]);
             return res.ToString();
         }
 
+
         /// <summary>
-        /// 随机得到数字字符串
+        /// 得到随机字符串
+        /// </summary>
+        /// <param name="source">基数字符串（通过该字符串产生随机字符串）</param>
+        /// <param name="len">字符串长度</param>
+        /// <returns>返回随机字符串</returns>
+        public static string RandString(string source, int len)
+        {
+            return RandString(source, len, null);
+        }
+
+        /// <summary>
+        /// 数字随机字符串
         /// </summary>
         /// <param name="len">字符串长度</param>
-        /// <returns>返回随机数字字符串</returns>
+        /// <returns>返回随机字符串</returns>
         public static string RandNumber(int len)
         {
-            if (len < 1)
-                return string.Empty;
             return RandString(Number, len);
         }
 
-
         /// <summary>
-        /// 随机得到小写字母字符串
+        /// 小写字母随机字符串
         /// </summary>
         /// <param name="len">字符串长度</param>
-        /// <returns></returns>
+        /// <returns>返回随机字符串</returns>
         public static string RandLowerCase(int len)
         {
-            if (len < 1)
-                return string.Empty;
             return RandString(LowerCase, len);
         }
 
-
         /// <summary>
-        /// 随机得到大写字母字符串
+        /// 大写字母随机字符串
         /// </summary>
         /// <param name="len">字符串长度</param>
-        /// <returns></returns>
+        /// <returns>返回随机字符串</returns>
         public static string RandUpperCase(int len)
         {
-            if (len < 1)
-                return string.Empty;
             return RandString(UpperCase, len);
         }
 
-
         /// <summary>
-        /// 随机得到大小写字母字符串
+        /// 大小写字母随机字符串
         /// </summary>
         /// <param name="len">字符串长度</param>
-        /// <returns></returns>
+        /// <returns>返回随机字符串</returns>
         public static string RandAlphabet(int len)
         {
-            if (len < 1)
-                return string.Empty;
             return RandString(Alphabet, len);
+        }
+
+        /// <summary>
+        /// 大小写字母加数字随机字符串
+        /// </summary>
+        /// <param name="len">字符串长度</param>
+        /// <returns>返回随机字符串</returns>
+        public static string RandAlphanumeric(int len)
+        {
+            return RandString(Alphanumeric, len);
         }
 
     }
