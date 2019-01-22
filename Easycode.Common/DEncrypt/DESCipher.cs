@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Easycode.Utilities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -21,8 +22,7 @@ namespace Easycode.DEncrypt
         {
             if (string.IsNullOrWhiteSpace(source))
                 return string.Empty;
-            if (string.IsNullOrWhiteSpace(keys))
-                throw new ArgumentNullException("加密密钥不能为空");
+            Check.Argument.IsEmpty(keys, "加密密钥");
             using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
             {
                 //MD5加密密钥
@@ -51,8 +51,7 @@ namespace Easycode.DEncrypt
         {
             if (string.IsNullOrWhiteSpace(source))
                 return string.Empty;
-            if (string.IsNullOrWhiteSpace(keys))
-                throw new ArgumentNullException("解密密钥不能为空");
+            Check.Argument.IsEmpty(keys, "解密密钥");
             using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
             {
                 //MD5加密密钥
