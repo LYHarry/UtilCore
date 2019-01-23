@@ -139,5 +139,26 @@ namespace Easycode.Common
             return RandString(Alphanumeric, len);
         }
 
+        /// <summary>
+        /// 在一个范围中随机得到一个整型数字
+        /// </summary>
+        /// <param name="minValue">最小值</param>
+        /// <param name="maxValue">最大值</param>
+        /// <returns>返回随机整型数字</returns>
+        public static int Next(int minValue, int maxValue)
+        {
+            return _rand.Next(minValue, maxValue);
+        }
+
+        /// <summary>
+        /// 随机得到一个整型数字
+        /// </summary>
+        /// <param name="maxValue">最大值</param>
+        /// <returns>返回随机整型数字</returns>
+        public static int Next(int maxValue)
+        {
+            return _rand.Next(maxValue);
+        }
+
     }
 }

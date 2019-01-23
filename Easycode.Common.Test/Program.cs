@@ -1,5 +1,6 @@
 ﻿using Easycode.DEncrypt;
 using System;
+using System.IO;
 using System.Text;
 
 namespace Easycode.Common.Test
@@ -9,10 +10,9 @@ namespace Easycode.Common.Test
         static void Main(string[] args)
         {
 
-            for (int i = 0; i < 200; i++)
-            {
-                Console.WriteLine("TickCount:{0}", RandomHelper.RandString(RandomHelper.LowerCase, 6));
-            }
+
+            var ext = Path.GetExtension("abc.txt").ToLower();
+            Console.WriteLine(ext);
 
 
             Console.ReadKey();
