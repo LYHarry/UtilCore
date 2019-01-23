@@ -1,11 +1,10 @@
-﻿using Easycode.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Easycode.DEncrypt
+namespace Easycode.Common.DEncrypt
 {
     /// <summary>
     /// DES 加密算法

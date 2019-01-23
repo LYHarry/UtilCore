@@ -11,16 +11,18 @@ namespace Easycode.Common
     /// </summary>
     public class ReflectHelper
     {
-        /// <summary>
-        /// 得到特性对象信息
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static T GetAttribute<T>(ICustomAttributeProvider provider) where T : Attribute
-        {
-            var attr = provider.GetCustomAttributes(true).FirstOrDefault();
-            return (T)attr;
-        }
+        ///// <summary>
+        ///// 得到特性对象信息
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="provider"></param>
+        ///// <returns></returns>
+        //public static T GetAttribute<T>(ICustomAttributeProvider provider) where T : Attribute
+        //{
+        //    if (provider == null)
+        //        return default(T);
+        //    var attr = provider.GetCustomAttributes(true).FirstOrDefault();
+        //    return (T)attr;
+        //}
     }
 }

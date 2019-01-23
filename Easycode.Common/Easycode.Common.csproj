@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Easycode</RootNamespace>
+    <RootNamespace>Easycode.Common</RootNamespace>
+    <AssemblyName>Easycode.Common</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -1,5 +1,4 @@
-﻿using Easycode.DEncrypt;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
@@ -9,7 +8,6 @@ namespace Easycode.Common.Test
     {
         static void Main(string[] args)
         {
-
 
             var ext = Path.GetExtension("abc.txt").ToLower();
             Console.WriteLine(ext);

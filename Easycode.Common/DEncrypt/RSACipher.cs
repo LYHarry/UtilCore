@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Easycode.DEncrypt
+namespace Easycode.Common.DEncrypt
 {
     /// <summary>
     /// RSA 加密算法

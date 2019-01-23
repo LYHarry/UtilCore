@@ -1,10 +1,9 @@
-﻿using Easycode.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Easycode.DEncrypt
+namespace Easycode.Common.DEncrypt
 {
     /// <summary>
     /// AES 加密算法

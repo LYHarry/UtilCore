@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Easycode.DEncrypt
+namespace Easycode.Common.DEncrypt
 {
     /// <summary>
     /// Hash 哈希加密算法

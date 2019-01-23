@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Easycode.Utilities
+namespace Easycode.Common
 {
     /// <summary>
     /// 检查类
