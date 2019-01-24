@@ -16,7 +16,7 @@ namespace Easycode.Common
         public static string AllowExt { get; set; } = "gif|png|jpeg|jpg|bmp";
 
         /// <summary>
-        /// 检测图片是否损坏(是否能正常预览)  
+        /// 检测图片是否损坏(是否能正常预览)
         /// </summary>
         /// <param name="imgPath">图片路径</param>
         /// <returns>是否损坏</returns>
@@ -24,7 +24,7 @@ namespace Easycode.Common
         {
             var ext = FileHelper.Fi.GetExtName(imgPath, false);
             if (!FileHelper.Fi.IsSpecifyType(ext, AllowExt.Split('|')))
-                throw new Exception($"暂不支持此{ext}类型文件");
+                throw new NotSupportedException($"暂不支持此{ext}类型文件");
             using (StreamReader sr = new StreamReader(imgPath, Encoding.UTF8))
             {
                 string strContent = sr.ReadToEnd().ToLower();
@@ -38,5 +38,10 @@ namespace Easycode.Common
             }
             return false;
         }
+
+
+        // todo 压缩图片
+
+        // todo 裁剪图片
     }
 }

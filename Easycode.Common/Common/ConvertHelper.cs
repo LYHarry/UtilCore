@@ -20,7 +20,7 @@ namespace Easycode.Common
         {
             Check.Argument.IsEmpty(source, nameof(source));
             var type = typeof(T);
-            if (!type.IsEnum && type.BaseType != typeof(Enum))
+            if (!type.IsEnum || type.BaseType != typeof(Enum))
                 throw new ArgumentException("泛型类型不正确，T 必须为枚举类型.");
             if (Enum.TryParse(source.Trim(), out T defValue))
                 return defValue;
@@ -38,7 +38,6 @@ namespace Easycode.Common
             return ToEnum<T>(source.ToString());
         }
 
-
         /// <summary>
         /// 时间戳字符串转换为时间(DateTime)类型
         /// </summary>
@@ -50,7 +49,8 @@ namespace Easycode.Common
             if (!long.TryParse(timestamp.Trim(), out long time))
                 throw new ArgumentException($"{timestamp}不能转换为时间戳类型数值.");
             //得到当地时区时间 以1970/01/01 8:00:00为起始时间
-            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            DateTime utcdt = new DateTime(1970, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+            DateTime startTime = TimeZoneInfo.ConvertTime(utcdt, TimeZoneInfo.Local);
             DateTime dt = startTime.AddSeconds(time);
             //时间戳包含毫秒数
             if (timestamp.Length == 13)

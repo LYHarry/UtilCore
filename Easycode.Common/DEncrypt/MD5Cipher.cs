@@ -34,10 +34,7 @@ namespace Easycode.Common.DEncrypt
         /// </summary>
         /// <param name="source">待加密字符串</param>
         /// <returns>返回小写加密字符串</returns>
-        public static string Encrypt(string source)
-        {
-            return Encrypt(source, Encoding.UTF8);
-        }
+        public static string Encrypt(string source) => Encrypt(source, Encoding.UTF8);
 
     }
 }

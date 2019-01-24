@@ -12,21 +12,6 @@ namespace Easycode.Common
     /// </summary>
     public class ReflectHelper
     {
-        ///// <summary>
-        ///// 得到特性对象信息
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="provider"></param>
-        ///// <returns></returns>
-        //public static T GetAttribute<T>(ICustomAttributeProvider provider) where T : Attribute
-        //{
-        //    if (provider == null)
-        //        return default(T);
-        //    var attr = provider.GetCustomAttributes(true).FirstOrDefault();
-        //    return (T)attr;
-        //}
-
-
         /// <summary>
         /// 加载汇编文件内容
         /// </summary>
@@ -42,12 +27,11 @@ namespace Easycode.Common
             {
                 try
                 {
-                    assembly = Assembly.LoadFile(item);
-                }
-                catch (Exception)
-                {
                     assembly = null;
+                    if (File.Exists(item))
+                        assembly = Assembly.LoadFile(item);
                 }
+                catch { assembly = null; }
                 if (assembly != null)
                     result.Add(assembly);
             }
@@ -61,6 +45,7 @@ namespace Easycode.Common
         /// <returns></returns>
         public static List<Assembly> LoadFiles(string path)
         {
+            Check.Argument.HasExistDir(path);
             var dllfiles = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             return LoadFiles(dllfiles);
         }

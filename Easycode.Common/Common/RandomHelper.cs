@@ -33,42 +33,28 @@ namespace Easycode.Common
         /// <summary>
         /// 大小写字母表
         /// </summary>
-        public static string Alphabet
-        {
-            get
-            {
-                return LowerCase + UpperCase;
-            }
-        }
+        public static string Alphabet => LowerCase + UpperCase;
 
         /// <summary>
         /// 大小写字母数字集
         /// </summary>
-        public static string Alphanumeric
-        {
-            get
-            {
-                return Number + LowerCase + UpperCase;
-            }
-        }
+        public static string Alphanumeric => Number + LowerCase + UpperCase;
 
         /// <summary>
         /// 生成随机字符串
         /// </summary>
-        /// <param name="source">基数字符串(通过该字符串产生随机字符串)</param>
-        /// <param name="len">字符串长度</param>
+        /// <param name="source">基数字符串()</param>
+        /// <param name="len">生成的随机字符串长度</param>
         /// <param name="filter">需要过滤的字符串</param>
         /// <returns>返回随机字符串</returns>
         public static string Generate(string source, int len, params string[] filter)
         {
-            if (string.IsNullOrWhiteSpace(source))
-                return string.Empty;
-            if (len < 1)
-                return string.Empty;
+            Check.Argument.IsEmpty(source, nameof(source));
+            Check.Argument.OutOfRange(len, nameof(len), 1, null);
             if (filter != null && filter.Length > 0)
             {
                 foreach (var item in filter)
-                    source = source.Replace(item, "");
+                    source = source.Replace(item, string.Empty);
             }
             StringBuilder res = new StringBuilder();
             for (int i = 0; i < len; i++)
@@ -78,86 +64,68 @@ namespace Easycode.Common
 
 
         /// <summary>
-        /// 得到随机字符串
+        /// 生成随机字符串
         /// </summary>
-        /// <param name="source">基数字符串（通过该字符串产生随机字符串）</param>
-        /// <param name="len">字符串长度</param>
+        /// <param name="source">基数字符串(通过该字符串产生随机字符串)</param>
+        /// <param name="len">生成的随机字符串长度</param>
         /// <returns>返回随机字符串</returns>
-        public static string Generate(string source, int len)
-        {
-            return Generate(source, len, null);
-        }
+        public static string Generate(string source, int len) => Generate(source, len, null);
 
         /// <summary>
         /// 数字随机字符串
         /// </summary>
         /// <param name="len">字符串长度</param>
-        /// <returns>返回随机字符串</returns>
-        public static string RandNumber(int len)
-        {
-            return Generate(Number, len);
-        }
+        /// <returns>返回数字随机字符串</returns>
+        public static string RandNumber(int len) => Generate(Number, len);
 
         /// <summary>
         /// 小写字母随机字符串
         /// </summary>
-        /// <param name="len">字符串长度</param>
-        /// <returns>返回随机字符串</returns>
-        public static string RandLowerCase(int len)
-        {
-            return Generate(LowerCase, len);
-        }
+        /// <param name="len">生成的随机字符串长度</param>
+        /// <returns>返回小写字母随机字符串</returns>
+        public static string RandLowerCase(int len) => Generate(LowerCase, len);
 
         /// <summary>
         /// 大写字母随机字符串
         /// </summary>
-        /// <param name="len">字符串长度</param>
-        /// <returns>返回随机字符串</returns>
-        public static string RandUpperCase(int len)
-        {
-            return Generate(UpperCase, len);
-        }
+        /// <param name="len">生成的随机字符串长度</param>
+        /// <returns>返回大写字母随机字符串</returns>
+        public static string RandUpperCase(int len) => Generate(UpperCase, len);
 
         /// <summary>
         /// 大小写字母随机字符串
         /// </summary>
-        /// <param name="len">字符串长度</param>
-        /// <returns>返回随机字符串</returns>
-        public static string RandAlphabet(int len)
-        {
-            return Generate(Alphabet, len);
-        }
+        /// <param name="len">生成的随机字符串长度</param>
+        /// <returns>返回大小写字母随机字符串</returns>
+        public static string RandAlphabet(int len) => Generate(Alphabet, len);
 
         /// <summary>
         /// 大小写字母加数字随机字符串
         /// </summary>
-        /// <param name="len">字符串长度</param>
-        /// <returns>返回随机字符串</returns>
-        public static string RandAlphanumeric(int len)
-        {
-            return Generate(Alphanumeric, len);
-        }
+        /// <param name="len">生成的随机字符串长度</param>
+        /// <returns>返回大小写字母加数字随机字符串</returns>
+        public static string RandAlphanumeric(int len) => Generate(Alphanumeric, len);
 
         /// <summary>
-        /// 在一个范围中随机得到一个整型数字
+        /// 在一个范围内得到随机整型数字
         /// </summary>
         /// <param name="minValue">最小值</param>
         /// <param name="maxValue">最大值</param>
         /// <returns>返回随机整型数字</returns>
-        public static int Next(int minValue, int maxValue)
-        {
-            return _rand.Next(minValue, maxValue);
-        }
+        public static int Next(int minValue, int maxValue) => _rand.Next(minValue, maxValue);
 
         /// <summary>
-        /// 随机得到一个整型数字
+        /// 得到随机整型数字
         /// </summary>
         /// <param name="maxValue">最大值</param>
         /// <returns>返回随机整型数字</returns>
-        public static int Next(int maxValue)
-        {
-            return _rand.Next(maxValue);
-        }
+        public static int Next(int maxValue) => _rand.Next(maxValue);
+
+        /// <summary>
+        /// 得到随机 0~1 的小数
+        /// </summary>
+        /// <returns>返回随机浮点数</returns>
+        public static double NextDouble() => _rand.NextDouble();
 
     }
 }

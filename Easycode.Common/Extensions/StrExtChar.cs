@@ -35,10 +35,7 @@ namespace Easycode.Extensions
         /// </summary>
         /// <param name="source">待判断字符串</param>
         /// <returns>不为空返回 true 否则 false </returns>
-        public static bool HasValue(this string source)
-        {
-            return !IsEmpty(source);
-        }
+        public static bool HasValue(this string source) => !IsEmpty(source);
 
 
     }

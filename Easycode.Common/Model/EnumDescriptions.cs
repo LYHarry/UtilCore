@@ -16,7 +16,7 @@ namespace Easycode.Common
         public string Name { get; set; }
 
         /// <summary>
-        /// 值
+        /// 枚举值
         /// </summary>
         public int Value { get; set; }
 

@@ -25,17 +25,17 @@ namespace Easycode.Common
         /// <summary>
         /// 是否为电子邮箱地址
         /// </summary>
-        /// <param name="Email">待判断字符串</param>
+        /// <param name="email">待判断邮箱地址</param>
         /// <returns></returns>
-        public static bool IsEmail(string Email)
+        public static bool IsEmail(string email)
         {
-            return Regex.IsMatch(Email, "^[a-z0-9]+([-_.][a-z0-9]+)*@([a-z0-9]+[-.])+[a-z0-9]{2,5}.com$", RegexOptions.IgnoreCase);
+            return Regex.IsMatch(email, "^[a-z0-9]+([-_.][a-z0-9]+)*@([a-z0-9]+[-.])+[a-z0-9]{2,5}.com$", RegexOptions.IgnoreCase);
         }
 
         /// <summary>
         /// 是否为身份证号
         /// </summary>
-        /// <param name="card">待判断字符串</param>
+        /// <param name="card">待判断身份证号</param>
         /// <returns></returns>
         public static bool IsIDCard(string card)
         {
@@ -44,8 +44,9 @@ namespace Easycode.Common
 
         /// <summary>
         /// 是否为手机号码
+        /// <para>格式：1[3|8|5|7|6|9]\d{9} </para>
         /// </summary>
-        /// <param name="phone">待判断字符串</param>
+        /// <param name="phone">待判断手机号</param>
         /// <returns></returns>
         public static bool IsPhone(string phone)
         {
@@ -135,7 +136,7 @@ namespace Easycode.Common
         /// <summary>
         /// 是否为IP地址
         /// </summary>
-        /// <param name="ip">待判断字符串</param>
+        /// <param name="ip">待判断ip地址</param>
         /// <returns></returns>
         public static bool IsIPAddress(string ip)
         {
@@ -145,7 +146,7 @@ namespace Easycode.Common
         /// <summary>
         /// 是否为base64字符串
         /// </summary>
-        /// <param name="content">待判断字符串</param>
+        /// <param name="content">待判断base64字符串</param>
         /// <returns></returns>
         public static bool IsBase64(string content)
         {
@@ -167,7 +168,7 @@ namespace Easycode.Common
         /// <summary>
         /// 是否为Web Url地址(以Http/Https开头)
         /// </summary>
-        /// <param name="url">待判断字符串</param>
+        /// <param name="url">待判断 url 地址</param>
         /// <returns></returns>
         public static bool IsWebURL(string url)
         {
@@ -177,7 +178,7 @@ namespace Easycode.Common
         /// <summary>
         /// 是否为物理路径
         /// </summary>
-        /// <param name="path">要判断的路径</param>
+        /// <param name="path">待判断路径</param>
         /// <returns></returns>
         public static bool IsPhysicsUrl(string path)
         {
@@ -185,7 +186,7 @@ namespace Easycode.Common
         }
 
         /// <summary>
-        /// 是否有SQL关键字
+        /// 是否含有SQL关键字
         /// </summary>
         /// <param name="content">待判断字符串</param>
         /// <returns></returns>
@@ -195,7 +196,7 @@ namespace Easycode.Common
         }
 
         /// <summary>
-        /// 是否有SQL字符
+        /// 是否含有SQL字符
         /// </summary>
         /// <param name="content">要判断字符串</param>
         /// <returns>判断结果</returns>
@@ -207,26 +208,26 @@ namespace Easycode.Common
 
         #endregion
 
+        #region 正则过滤字符串
 
         /// <summary>
         /// 移除Html标记
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string RemoveHtml(string content)
         {
             return Regex.Replace(content, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
         }
 
-
         /// <summary>
         /// 过滤HTML中的不安全标签
         /// </summary>
-        /// <param name="content">需过滤的字符串</param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string DealUnSafeHtml(string content)
         {
-            content = content.Replace("'", "");
+            content = Regex.Replace(content, "'", "");
             content = Regex.Replace(content, @"(\<|\s+)o([a-z]+\s?=)", "", RegexOptions.IgnoreCase);
             content = Regex.Replace(content, @"(script|form|meta|behavior|style)([\s|:|>])+", "", RegexOptions.IgnoreCase);
             return content;
@@ -236,7 +237,7 @@ namespace Easycode.Common
         /// <summary>
         /// 过滤html,js,css代码
         /// </summary>
-        /// <param name="html">需过滤的字符串</param>
+        /// <param name="html">待过滤字符串</param>
         /// <returns></returns>
         public static string DealHtmlCode(string html)
         {
@@ -277,7 +278,7 @@ namespace Easycode.Common
         /// <summary>
         /// 过滤SQL关键字语句
         /// </summary>
-        /// <param name="content">需过滤的字符串</param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string DealSqlStr(string content)
         {
@@ -288,7 +289,7 @@ namespace Easycode.Common
         /// <summary>
         /// 处理Sql危险字符
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string DealUnSafeSqlStr(string content)
         {
@@ -299,44 +300,37 @@ namespace Easycode.Common
         /// <summary>
         /// 去除aspx页面头部的标记
         /// </summary>
-        /// <param name="aspxhtml">aspx页面HTML（包含aspx头部标记的字符串）</param>
+        /// <param name="aspxhtml">待过滤aspx页面HTML(包含aspx头部标记的字符串)</param>
         /// <returns></returns>
         public static string RemoveAspxTag(string aspxhtml)
         {
             return Regex.Replace(aspxhtml, "\\<%@.+%>\n*", "");
         }
 
-
         /// <summary>
         /// 清理字符串
         /// </summary>
-        /// <param name="content">需清除的字符串</param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string CleanChar(string content)
         {
             return Regex.Replace(content, @"[^\w\.@-]", "");
         }
 
-
         /// <summary>
         /// 清除字符串中的空格
         /// </summary>
-        /// <param name="content">待清除字符串</param>
+        /// <param name="content">待过滤字符串</param>
         /// <returns></returns>
         public static string CleanSpacing(string content)
         {
             return Regex.Replace(content, @"[\s]+", "");
         }
 
-
-
-
-
-
         /// <summary>
         /// 获取页面上所有的图片地址
         /// </summary>
-        /// <param name="content">页面内容</param>
+        /// <param name="content">html页面内容</param>
         /// <returns></returns>
         public static string[] GetHtmlImgUrl(string content)
         {
@@ -351,11 +345,10 @@ namespace Easycode.Common
             return sUrlList;
         }
 
-
         /// <summary>
         /// 获取页面上所有的链接地址
         /// </summary>
-        /// <param name="content">页面内容</param>
+        /// <param name="content">html页面内容</param>
         /// <returns></returns>
         public static string[] GetHtmlUrl(string content)
         {
@@ -370,5 +363,6 @@ namespace Easycode.Common
             return sUrlList;
         }
 
+        #endregion
     }
 }

@@ -33,10 +33,7 @@ namespace Easycode.Common.Common
         /// <param name="content">待截取字符串</param>
         /// <param name="len">截取长度</param>
         /// <returns>如果字符串长度小于截取长度则返回原字符串，否则返回截取字符串加省略符(...)的字符串</returns>
-        public static string CutOut(string content, int len)
-        {
-            return CutOut(content, len, "...");
-        }
+        public static string CutOut(string content, int len) => CutOut(content, len, "...");
 
         /// <summary>
         /// 为字符串添加掩码
@@ -80,10 +77,7 @@ namespace Easycode.Common.Common
         /// <param name="index">开始下标(从0开始)</param>
         /// <param name="maskLen">掩码长度</param>
         /// <returns>返回添加了(*)掩码的字符串</returns>
-        public static string AddMask(string content, int index, int maskLen)
-        {
-            return AddMask(content, index, maskLen, "*");
-        }
+        public static string AddMask(string content, int index, int maskLen) => AddMask(content, index, maskLen, "*");
 
         /// <summary>
         /// 为字符串添加掩码
@@ -91,12 +85,7 @@ namespace Easycode.Common.Common
         /// <param name="content">待添加掩码字符串</param>
         /// <param name="index">开始下标(从0开始)</param>
         /// <returns>返回添加了4位(*)掩码的字符串</returns>
-        public static string AddMask(string content, int index)
-        {
-            return AddMask(content, index, 4, "*");
-        }
-
-              
+        public static string AddMask(string content, int index) => AddMask(content, index, 4, "*");
 
     }
 }

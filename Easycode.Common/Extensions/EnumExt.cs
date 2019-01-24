@@ -74,10 +74,7 @@ namespace Easycode.Extensions
         /// </summary>
         /// <param name="e">枚举对象</param>
         /// <returns></returns>
-        public static int Value(this Enum e)
-        {
-            return Convert.ToInt32(e);
-        }
+        public static int Value(this Enum e) => Convert.ToInt32(e);
 
         /// <summary>
         /// 得到枚举所有的名称和值
@@ -151,10 +148,12 @@ namespace Easycode.Extensions
             {
                 if (ignoreEnum.Where(p => p.Name() == item.Name).FirstOrDefault() != null)
                     continue;
-                if (item.ShowName.HasValue())
+                if (!string.IsNullOrWhiteSpace(item.ShowName))
                     item.Name = item.ShowName;
-                else if (item.Description.HasValue())
+                else if (!string.IsNullOrWhiteSpace(item.Description))
                     item.Name = item.Description;
+                if (string.IsNullOrWhiteSpace(item.Name))
+                    item.Name = item.Value.ToString();
                 result.Add(item);
             }
             return result;

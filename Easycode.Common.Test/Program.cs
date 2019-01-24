@@ -8,7 +8,6 @@ namespace Easycode.Common.Test
     {
         static void Main(string[] args)
         {
-
             var ext = Path.GetExtension("abc.txt").ToLower();
             Console.WriteLine(ext);
 

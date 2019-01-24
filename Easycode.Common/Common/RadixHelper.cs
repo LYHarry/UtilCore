@@ -7,7 +7,7 @@ using System.Linq;
 namespace Easycode.Common
 {
     /// <summary>
-    /// Object基类帮助类
+    /// Object 基类帮助类
     /// </summary>
     public class RadixHelper
     {

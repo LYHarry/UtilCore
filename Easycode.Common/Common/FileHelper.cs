@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Linq;
 
-
 namespace Easycode.Common
 {
     /// <summary>
@@ -22,16 +21,16 @@ namespace Easycode.Common
             /// <summary>
             /// 读取文件内容到流中
             /// </summary>
-            /// <param name="filePath">文件路径</param>
+            /// <param name="path">文件路径</param>
             /// <returns>返回 Stream</returns>
-            public static Stream ToStream(string filePath)
+            public static Stream ToStream(string path)
             {
-                Check.Argument.HasExistFile(filePath);
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                Check.Argument.HasExistFile(path);
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     byte[] bytes = new byte[fileStream.Length];
                     fileStream.Read(bytes, 0, bytes.Length);
-                    return (new MemoryStream(bytes));
+                    return new MemoryStream(bytes);
                 }
             }
 
@@ -39,15 +38,15 @@ namespace Easycode.Common
             /// 把Stream数据写入文件
             /// </summary>
             /// <param name="stream">Stream</param>
-            /// <param name="filePath">文件路径</param>
+            /// <param name="path">文件路径</param>
             /// <returns></returns>
-            public static bool SaveByStream(Stream stream, string filePath)
+            public static bool SaveByStream(Stream stream, string path)
             {
-                Check.Argument.ExistFile(filePath);
+                Check.Argument.ExistFile(path);
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
                 stream.Seek(0, SeekOrigin.Begin);
-                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                using (FileStream fs = new FileStream(path, FileMode.Create))
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
                     bw.Write(bytes);
@@ -59,12 +58,12 @@ namespace Easycode.Common
             /// 把字节数组数据写入文件
             /// </summary>
             /// <param name="buffer">二进制流数据</param>
-            /// <param name="filePath">文件路径</param>
+            /// <param name="path">文件路径</param>
             /// <returns></returns>
-            public static bool SaveByBytes(byte[] buffer, string filePath)
+            public static bool SaveByBytes(byte[] buffer, string path)
             {
-                Check.Argument.ExistFile(filePath);
-                FileInfo file = new FileInfo(filePath);
+                Check.Argument.ExistFile(path);
+                FileInfo file = new FileInfo(path);
                 using (FileStream fs = file.Create())
                 {
                     fs.Write(buffer, 0, buffer.Length);
@@ -82,13 +81,12 @@ namespace Easycode.Common
             public static bool CopyFile(string sourceFilePath, string toDirPath, bool overWrite = false)
             {
                 Check.Argument.HasExistFile(sourceFilePath);
-                Check.Argument.HasExistDir(toDirPath);
-                string filePath = Path.GetFileName(sourceFilePath);
-                filePath = Path.Combine(toDirPath, filePath);
+                Dir.CreateDir(toDirPath); //目标路径不存在，则创建
+                string path = Path.Combine(toDirPath, Path.GetFileName(sourceFilePath));
                 //目标目录存在该文件，并不充许覆盖
-                if (File.Exists(filePath) && !overWrite)
+                if (File.Exists(path) && !overWrite)
                     return false;
-                File.Copy(sourceFilePath, filePath, overWrite);
+                File.Copy(sourceFilePath, path, overWrite);
                 return true;
             }
 
@@ -101,15 +99,14 @@ namespace Easycode.Common
             public static bool MoveFile(string sourceFilePath, string toDirPath)
             {
                 Check.Argument.HasExistFile(sourceFilePath);
-                Check.Argument.HasExistDir(toDirPath);
+                Dir.CreateDir(toDirPath); //目标路径不存在，则创建
                 //获取源文件的名称
                 string sourceFileName = Path.GetFileName(sourceFilePath);
                 //得到文件在新文件夹的物理路径
-                string newFilePath = Path.Combine(toDirPath, sourceFileName);
-                Check.Argument.HasExistFile(newFilePath);
-                Dir.CreateDir(toDirPath);
+                string newpath = Path.Combine(toDirPath, sourceFileName);
+                Check.Argument.HasExistFile(newpath);
                 //将文件移动到指定目录
-                File.Move(sourceFilePath, newFilePath);
+                File.Move(sourceFilePath, newpath);
                 return true;
             }
 
@@ -136,12 +133,12 @@ namespace Easycode.Common
             /// <summary>
             /// 得到文件大小(单位为GB/MB/KB)
             /// </summary>
-            /// <param name="filePath">文件路径</param>
+            /// <param name="path">文件路径</param>
             /// <returns>返回文件大小</returns>
-            public static string GetFileSize(string filePath)
+            public static string GetFileSize(string path)
             {
-                Check.Argument.HasExistFile(filePath);
-                FileInfo fileinfo = new FileInfo(filePath);
+                Check.Argument.HasExistFile(path);
+                FileInfo fileinfo = new FileInfo(path);
                 return CountFileSize(fileinfo.Length);
             }
 
@@ -155,8 +152,11 @@ namespace Easycode.Common
             {
                 Check.Argument.IsEmpty(ext, nameof(ext));
                 Check.Argument.IsEmpty(type, nameof(type));
-                if (type.Contains(ext))
-                    return true;
+                foreach (var item in type)
+                {
+                    if (item.Equals(ext, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+                }
                 return false;
             }
 
@@ -180,10 +180,8 @@ namespace Easycode.Common
             /// </summary>
             /// <param name="fileName">文件名称</param>
             /// <returns>返回小写并带圆点(.)扩展名</returns>
-            public static string GetExtName(string fileName)
-            {
-                return GetExtName(fileName, true);
-            }
+            public static string GetExtName(string fileName) => GetExtName(fileName, true);
+
         }
 
         /// <summary>

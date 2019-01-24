@@ -17,7 +17,7 @@ namespace Easycode.Common
         /// <param name="message">提示信息</param>
         /// <param name="argumentName">参数名称</param>
         /// <returns></returns>
-        internal static string GetEmptyMessage(string message, string argumentName)
+        private static string GetEmptyMessage(string message, string argumentName)
         {
             return $"{message} {argumentName} 不能为空.".Trim();
         }
@@ -36,7 +36,7 @@ namespace Easycode.Common
             internal static void IsEmpty(string argument, string argumentName, string message = "")
             {
                 if (string.IsNullOrEmpty((argument ?? string.Empty).Trim()))
-                    throw new ArgumentException(argumentName, GetEmptyMessage(message, argumentName));
+                    throw new ArgumentNullException(argumentName, GetEmptyMessage(message, argumentName));
             }
 
             /// <summary>
@@ -48,6 +48,19 @@ namespace Easycode.Common
             internal static void IsNull(object argument, string argumentName, string message = "")
             {
                 if (argument == null)
+                    throw new ArgumentNullException(argumentName, GetEmptyMessage(message, argumentName));
+            }
+
+            /// <summary>
+            /// 列表集合参数是否为空
+            /// </summary>
+            /// <typeparam name="T">参数类型</typeparam>
+            /// <param name="argument">参数</param>
+            /// <param name="argumentName">参数名称</param>
+            /// <param name="message">提示信息</param>
+            internal static void IsEmpty<T>(ICollection<T> argument, string argumentName, string message = "")
+            {
+                if (argument == null || argument.Count < 1)
                     throw new ArgumentNullException(argumentName, GetEmptyMessage(message, argumentName));
             }
 
@@ -69,8 +82,8 @@ namespace Easycode.Common
             internal static void ExistFile(string filePath)
             {
                 IsEmpty(filePath, "path", "路径");
-                if (!File.Exists(filePath))
-                    throw new FileNotFoundException($"{filePath} 文件已存在.");
+                if (File.Exists(filePath))
+                    throw new Exception($"{filePath} 文件已存在.");
             }
 
             /// <summary>
@@ -82,19 +95,6 @@ namespace Easycode.Common
                 IsEmpty(Path, "path", "路径");
                 if (!Directory.Exists(Path))
                     throw new FileNotFoundException($"{Path} 目录不存在.");
-            }
-
-            /// <summary>
-            /// 列表集合参数是否为空
-            /// </summary>
-            /// <typeparam name="T">参数类型</typeparam>
-            /// <param name="argument">参数</param>
-            /// <param name="argumentName">参数名称</param>
-            /// <param name="message">提示信息</param>
-            internal static void IsEmpty<T>(ICollection<T> argument, string argumentName, string message = "")
-            {
-                if (argument == null || argument.Count < 1)
-                    throw new ArgumentException(argumentName, GetEmptyMessage(message, argumentName));
             }
 
             /// <summary>
@@ -112,9 +112,19 @@ namespace Easycode.Common
                     message.Append($"，必须大于或等于{min.Value}");
                 if (max.HasValue && !(argument < max.Value))
                     message.Append($"，必须小于或等于{max.Value}");
-                throw new IndexOutOfRangeException(message.ToString());
+                throw new ArgumentOutOfRangeException(message.ToString());
             }
 
+
+            /// <summary>
+            /// 参数错误
+            /// </summary>
+            /// <param name="argumentName">参数名称</param>
+            /// <param name="message">提示信息</param>
+            internal static void ArgError(string argumentName, string message)
+            {
+                throw new ArgumentException(message, argumentName);
+            }
 
 
         }
