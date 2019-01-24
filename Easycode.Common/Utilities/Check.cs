@@ -89,12 +89,12 @@ namespace Easycode.Common
             /// <summary>
             /// 目录是否存在
             /// </summary>
-            /// <param name="Path">目录路径(物理路径)</param>
-            internal static void HasExistDir(string Path)
+            /// <param name="path">目录路径(物理路径)</param>
+            internal static void HasExistDir(string path)
             {
-                IsEmpty(Path, "path", "路径");
-                if (!Directory.Exists(Path))
-                    throw new FileNotFoundException($"{Path} 目录不存在.");
+                IsEmpty(path, "path", "路径");
+                if (!Directory.Exists(path))
+                    throw new FileNotFoundException($"{path} 目录不存在.");
             }
 
             /// <summary>
@@ -113,17 +113,6 @@ namespace Easycode.Common
                 if (max.HasValue && !(argument < max.Value))
                     message.Append($"，必须小于或等于{max.Value}");
                 throw new ArgumentOutOfRangeException(message.ToString());
-            }
-
-
-            /// <summary>
-            /// 参数错误
-            /// </summary>
-            /// <param name="argumentName">参数名称</param>
-            /// <param name="message">提示信息</param>
-            internal static void ArgError(string argumentName, string message)
-            {
-                throw new ArgumentException(message, argumentName);
             }
 
 

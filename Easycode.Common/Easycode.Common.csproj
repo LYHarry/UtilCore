@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Easycode.Common</RootNamespace>
     <AssemblyName>Easycode.Common</AssemblyName>
+    <Description>基于 .NET Standard 2.0 开发的公共方法类库</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
