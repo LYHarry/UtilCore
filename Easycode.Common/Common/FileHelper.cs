@@ -159,7 +159,7 @@ namespace Easycode.Common
                     return true;
                 return false;
             }
-            
+
             /// <summary>
             /// 得到文件扩展名
             /// </summary>
@@ -170,9 +170,9 @@ namespace Easycode.Common
             {
                 Check.Argument.IsEmpty(fileName, nameof(fileName));
                 fileName = Path.GetExtension(fileName).ToLower();
-                if (!isBeDot)
-                    fileName = fileName.Substring(1);
-                return fileName;
+                if (isBeDot)
+                    return fileName;
+                return fileName.Substring(1);
             }
 
             /// <summary>

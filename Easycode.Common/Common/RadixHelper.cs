@@ -44,7 +44,6 @@ namespace Easycode.Common
         /// <returns>为空返回 true 否则 false </returns>
         public static bool IsEmpty(object source)
         {
-
             if (source == null) return true;
             var type = source.GetType();
             //字符串类型

@@ -97,6 +97,24 @@ namespace Easycode.Common
                     throw new ArgumentException(argumentName, GetEmptyMessage(message, argumentName));
             }
 
+            /// <summary>
+            /// 参数超出范围
+            /// </summary>
+            /// <param name="argument">参数</param>
+            /// <param name="argumentName">参数名称</param>
+            /// <param name="min">最小值</param>
+            /// <param name="max">最大值</param>
+            internal static void OutOfRange(int argument, string argumentName, int? min, int? max)
+            {
+                StringBuilder message = new StringBuilder();
+                message.Append($"{argumentName}超出范围");
+                if (min.HasValue && !(argument > min.Value))
+                    message.Append($"，必须大于或等于{min.Value}");
+                if (max.HasValue && !(argument < max.Value))
+                    message.Append($"，必须小于或等于{max.Value}");
+                throw new IndexOutOfRangeException(message.ToString());
+            }
+
 
 
         }

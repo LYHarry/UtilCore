@@ -312,9 +312,20 @@ namespace Easycode.Common
         /// </summary>
         /// <param name="content">需清除的字符串</param>
         /// <returns></returns>
-        public static string CleanStr(string content)
+        public static string CleanChar(string content)
         {
             return Regex.Replace(content, @"[^\w\.@-]", "");
+        }
+
+
+        /// <summary>
+        /// 清除字符串中的空格
+        /// </summary>
+        /// <param name="content">待清除字符串</param>
+        /// <returns></returns>
+        public static string CleanSpacing(string content)
+        {
+            return Regex.Replace(content, @"[\s]+", "");
         }
 
 

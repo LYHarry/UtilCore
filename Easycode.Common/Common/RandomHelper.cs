@@ -52,15 +52,14 @@ namespace Easycode.Common
             }
         }
 
-
         /// <summary>
-        /// 得到随机字符串
+        /// 生成随机字符串
         /// </summary>
         /// <param name="source">基数字符串(通过该字符串产生随机字符串)</param>
         /// <param name="len">字符串长度</param>
         /// <param name="filter">需要过滤的字符串</param>
         /// <returns>返回随机字符串</returns>
-        public static string RandString(string source, int len, params string[] filter)
+        public static string Generate(string source, int len, params string[] filter)
         {
             if (string.IsNullOrWhiteSpace(source))
                 return string.Empty;
@@ -84,9 +83,9 @@ namespace Easycode.Common
         /// <param name="source">基数字符串（通过该字符串产生随机字符串）</param>
         /// <param name="len">字符串长度</param>
         /// <returns>返回随机字符串</returns>
-        public static string RandString(string source, int len)
+        public static string Generate(string source, int len)
         {
-            return RandString(source, len, null);
+            return Generate(source, len, null);
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace Easycode.Common
         /// <returns>返回随机字符串</returns>
         public static string RandNumber(int len)
         {
-            return RandString(Number, len);
+            return Generate(Number, len);
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace Easycode.Common
         /// <returns>返回随机字符串</returns>
         public static string RandLowerCase(int len)
         {
-            return RandString(LowerCase, len);
+            return Generate(LowerCase, len);
         }
 
         /// <summary>
@@ -116,7 +115,7 @@ namespace Easycode.Common
         /// <returns>返回随机字符串</returns>
         public static string RandUpperCase(int len)
         {
-            return RandString(UpperCase, len);
+            return Generate(UpperCase, len);
         }
 
         /// <summary>
@@ -126,7 +125,7 @@ namespace Easycode.Common
         /// <returns>返回随机字符串</returns>
         public static string RandAlphabet(int len)
         {
-            return RandString(Alphabet, len);
+            return Generate(Alphabet, len);
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace Easycode.Common
         /// <returns>返回随机字符串</returns>
         public static string RandAlphanumeric(int len)
         {
-            return RandString(Alphanumeric, len);
+            return Generate(Alphanumeric, len);
         }
 
         /// <summary>

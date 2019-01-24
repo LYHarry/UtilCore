@@ -118,7 +118,8 @@ namespace Easycode.Extensions
             int enumValue = 0;
             foreach (var item in fields)
             {
-                enumValue = Convert.ToInt32(item.GetValue(e));
+                if (!int.TryParse(item.GetValue(e)?.ToString(), out enumValue))
+                    continue;
                 descAttr = item.GetCustomAttribute<DescriptionAttribute>(true);
                 nameAttr = item.GetCustomAttribute<DisplayNameAttribute>(true);
                 result.Add(new EnumDescriptions()
@@ -140,19 +141,21 @@ namespace Easycode.Extensions
         /// <param name="e">枚举对象</param>
         /// <param name="ignoreEnum">忽略枚举选项</param>
         /// <returns></returns>
-        public static NameValueCollection Options(this Enum e, params Enum[] ignoreEnum)
+        public static List<EnumDescriptions> Options(this Enum e, params Enum[] ignoreEnum)
         {
-            NameValueCollection result = new NameValueCollection();
+            List<EnumDescriptions> result = new List<EnumDescriptions>();
             var enumList = e.Items();
             if (enumList == null || enumList.Count < 1)
                 return result;
             foreach (var item in enumList)
             {
+                if (ignoreEnum.Where(p => p.Name() == item.Name).FirstOrDefault() != null)
+                    continue;
                 if (item.ShowName.HasValue())
                     item.Name = item.ShowName;
                 else if (item.Description.HasValue())
                     item.Name = item.Description;
-                result.Add(item.Name, item.Value.ToString());
+                result.Add(item);
             }
             return result;
         }

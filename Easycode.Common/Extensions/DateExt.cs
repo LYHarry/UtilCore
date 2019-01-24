@@ -16,7 +16,7 @@ namespace Easycode.Extensions
         /// <param name="dt">时间</param>
         /// <param name="isBeMsec">是否包含毫秒数</param>
         /// <returns>包含毫秒数返回13位时间戳，否则返回10位时间戳</returns>
-        public static long ToUnixTime(this DateTime dt, bool isBeMsec = false)
+        public static long ToUnixTime(this DateTime dt, bool isBeMsec)
         {
             //备注：
             //JavaScript时间戳是总毫秒数，Unix时间戳是总秒数
@@ -30,6 +30,16 @@ namespace Easycode.Extensions
             if (isBeMsec)
                 time = (dt - startTime).TotalMilliseconds;//相差毫秒数
             return Convert.ToInt64(time);
+        }
+
+        /// <summary>
+        /// 得到时间戳格式
+        /// </summary>
+        /// <param name="dt">时间</param>
+        /// <returns>返回13位时间戳(包含毫秒数)</returns>
+        public static long ToUnixTime(this DateTime dt)
+        {
+            return ToUnixTime(dt, false);
         }
 
 

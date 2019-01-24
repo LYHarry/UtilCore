@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Easycode.Common
@@ -12,57 +13,82 @@ namespace Easycode.Common
         /// <summary>
         /// 转换为枚举类型
         /// </summary>
-        /// <typeparam name="T">返回枚举类型</typeparam>
-        /// <param name="strValue">需要转换的字符串</param>
+        /// <typeparam name="T">枚举类型</typeparam>
+        /// <param name="source">待转换字符串</param>
         /// <returns></returns>
-        public static T StrToEnum<T>(string strValue) where T : struct
+        public static T ToEnum<T>(string source) where T : struct
         {
-            if (typeof(T).BaseType != typeof(Enum))
-                throw new ArgumentException("泛型类型不正确，请使用枚举类型");
-            if (string.IsNullOrEmpty(strValue))
-                return default(T);
-            strValue = strValue.Trim();
-            if (Enum.TryParse(strValue, out T defValue))
+            Check.Argument.IsEmpty(source, nameof(source));
+            var type = typeof(T);
+            if (!type.IsEnum && type.BaseType != typeof(Enum))
+                throw new ArgumentException("泛型类型不正确，T 必须为枚举类型.");
+            if (Enum.TryParse(source.Trim(), out T defValue))
                 return defValue;
+            throw new ArgumentException($"{source}不属于{type.Name}泛型.");
+        }
 
-            return defValue;
+        /// <summary>
+        /// 转换为枚举类型
+        /// </summary>
+        /// <typeparam name="T">枚举类型</typeparam>
+        /// <param name="source">待转换数值</param>
+        /// <returns></returns>
+        public static T ToEnum<T>(int source) where T : struct
+        {
+            return ToEnum<T>(source.ToString());
         }
 
 
         /// <summary>
-        /// 通过时间戳字符串得到时间
+        /// 时间戳字符串转换为时间(DateTime)类型
         /// </summary>
-        /// <param name="timestamp">时间戳字符串</param>
-        /// <returns>错误返回当前时间</returns>
-        public static DateTime UnixToDateTime(string timestamp)
+        /// <param name="timestamp">待转换时间戳字符串</param>
+        /// <returns></returns>
+        public static DateTime ToDateTime(string timestamp)
         {
-            if (string.IsNullOrEmpty(timestamp))
-                return DateTime.Now;
-            timestamp = timestamp.Trim();
-            long time = 0;
-            if (!long.TryParse(timestamp, out time))
-                return DateTime.Now;
+            Check.Argument.IsEmpty(timestamp, nameof(timestamp));
+            if (!long.TryParse(timestamp.Trim(), out long time))
+                throw new ArgumentException($"{timestamp}不能转换为时间戳类型数值.");
             //得到当地时区时间 以1970/01/01 8:00:00为起始时间
             DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
             DateTime dt = startTime.AddSeconds(time);
             //时间戳包含毫秒数
             if (timestamp.Length == 13)
-            {
                 dt = startTime.AddMilliseconds(time);
-            }
             return dt;
         }
 
+        /// <summary>
+        /// 时间戳转换为时间(DateTime)类型
+        /// </summary>
+        /// <param name="timestamp">待转换时间戳</param>
+        /// <returns></returns>
+        public static DateTime ToDateTime(long timestamp)
+        {
+            return ToDateTime(timestamp.ToString());
+        }
 
         /// <summary>
-        /// 将字符串转换为byte数组
+        /// 转换为 bool 型
         /// </summary>
-        /// <param name="content">要转换的字符串</param>
-        /// <returns>转换之后的byte数组</returns>
-        public static byte[] StrToBytes(string content)
+        /// <param name="source">待转换字符串</param>
+        /// <returns>true/1/是/"true"/开 返回 true 否则 false </returns>
+        public static bool ToBool(string source)
         {
-            return Encoding.UTF8.GetBytes(content);
+            source = (source ?? string.Empty).Trim().ToLower();
+            if (bool.TryParse(source, out bool value))
+                return value;
+            switch (source)
+            {
+                case "true":
+                case "1":
+                case "是":
+                case "开":
+                    return true;
+            }
+            return false;
         }
-    
+
+
     }
 }
