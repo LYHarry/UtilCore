@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>基于 .NET Standard 2.0 开发的定时任务类库</Description>
+    <PackageId>Easycode.TimerService</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="README.md" />
+  </ItemGroup>
 
 </Project>
