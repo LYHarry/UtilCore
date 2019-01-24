@@ -6,6 +6,7 @@ namespace Easycode.TimerService
 {
     /// <summary>
     /// 工作任务接口
+    /// <para>该接口包含异常处理方法</para>
     /// </summary>
     public interface IJobTask : ITask
     {
