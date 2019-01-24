@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easycode.Common", "Easycode.Common\Easycode.Common.csproj", "{E22208C8-510E-47B9-83E8-FF5BA151A1FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easycode.Test", "Easycode.Test\Easycode.Test.csproj", "{6C6DED78-9FE5-477E-B767-E9AF1717C0BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easycode.Common.Test", "Easycode.Common.Test\Easycode.Common.Test.csproj", "{6C6DED78-9FE5-477E-B767-E9AF1717C0BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
