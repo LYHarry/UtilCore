@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Easycode.Test
+namespace Easycode.Common.Test
 {
     class Program
     {

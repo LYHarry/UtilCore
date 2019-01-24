@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 
-namespace Easycode.Common.Extensions
+namespace Easycode.Extensions
 {
     /// <summary>
     /// 字符串扩展帮助类

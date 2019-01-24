@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 
-namespace Easycode.Common.Common
+namespace Easycode.Common
 {
     /// <summary>
     /// 其他帮助类
