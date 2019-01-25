@@ -6,6 +6,6 @@ namespace Easycode.TimerService
 {
     internal interface ILog
     {
-        bool Log(LogLevel logLevel, Func<string> messageFunc, Exception exception = null, params object[] formatParameters);
+        bool Log(LogLevel logLevel, string message, Exception exception = null, params object[] formatParameters);
     }
 }

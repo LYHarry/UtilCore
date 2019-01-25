@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Easycode.TimerService;
+using System;
 using System.IO;
 using System.Text;
 
@@ -8,8 +9,9 @@ namespace Easycode.Common.Test
     {
         static void Main(string[] args)
         {
-            var ext = Path.GetExtension("abc.txt").ToLower();
-            Console.WriteLine(ext);
+            LogHelper.Info("log 测试");
+
+            Console.WriteLine("测试");
 
 
             Console.ReadKey();
