@@ -57,7 +57,7 @@ namespace Easycode.Common
             {
                 if (!DateTime.TryParse(source.ToString(), out DateTime dt))
                     return true;
-                if (dt.Year == 1 && dt.Month == 1 && dt.Day == 1)
+                if (dt == DateTime.MinValue)
                     return true;
             }
             //TimeSpan 类型默认时间 0:00:00
@@ -65,7 +65,7 @@ namespace Easycode.Common
             {
                 if (!TimeSpan.TryParse(source.ToString(), out TimeSpan ts))
                     return true;
-                if (ts.Days == 0 && ts.Hours == 0 && ts.Minutes == 0 && ts.Seconds == 0)
+                if (ts == TimeSpan.Zero)
                     return true;
             }
             //DBNull 类型

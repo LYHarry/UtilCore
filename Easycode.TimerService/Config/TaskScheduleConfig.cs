@@ -9,6 +9,6 @@ namespace Easycode.TimerService.Config
     /// </summary>
     public class TaskScheduleConfig
     {
-
+        public string StartDate { get; set; }
     }
 }
