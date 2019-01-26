@@ -13,7 +13,7 @@ namespace Easycode.Common
     public class ReflectHelper
     {
         /// <summary>
-        /// 加载汇编文件内容
+        /// 加载dll文件
         /// </summary>
         /// <param name="filePaths">dll文件路径(物理绝对路径)</param>
         /// <returns></returns>
@@ -39,14 +39,29 @@ namespace Easycode.Common
         }
 
         /// <summary>
-        /// 加载指定路径下的所有汇编文件内容
+        /// 加载指定路径下dll文件
         /// </summary>
-        /// <param name="path">路径(物理绝对路径)</param>
+        /// <param name="path">目录路径(物理绝对路径)</param>
         /// <returns></returns>
         public static List<Assembly> LoadFiles(string path)
         {
             Check.Argument.HasExistDir(path);
             var dllfiles = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
+            return LoadFiles(dllfiles);
+        }
+
+        /// <summary>
+        /// 加载指定路径下dll文件
+        /// </summary>
+        /// <param name="path">目录路径(物理绝对路径)</param>
+        /// <param name="dllName">dll名称(为空时加载该目录下所有dll文件)</param>
+        /// <returns></returns>
+        public static List<Assembly> LoadFiles(string path, string dllName)
+        {
+            Check.Argument.HasExistDir(path);
+            if (string.IsNullOrWhiteSpace(dllName))
+                return LoadFiles(path);
+            var dllfiles = Directory.GetFiles(path, $"*{dllName.Trim()}*.dll", SearchOption.TopDirectoryOnly);
             return LoadFiles(dllfiles);
         }
 

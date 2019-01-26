@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easycode.TimerService
 {
@@ -9,10 +10,6 @@ namespace Easycode.TimerService
     /// </summary>
     public interface ITimerServiceFactory
     {
-        void Start();
-
-        void Stop();
-
-        void Stop(TaskModule task);
+        Task<ITaskScheduler> GetScheduler(string dllName);
     }
 }
