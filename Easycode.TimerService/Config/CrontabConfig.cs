@@ -5,12 +5,15 @@ using System.Text;
 namespace Easycode.TimerService
 {
     /// <summary>
-    /// 任务计划安排配置
+    /// 定时任务调试配置
     /// </summary>
-    public class TaskScheduleConfig
+    public class CrontabConfig
     {
         public string FireTime { get; set; }
 
-        public SpecifyTaskMapConfig SpecifyTaskConfig { get; set; }
+        /// <summary>
+        /// 执行间隔的天数
+        /// </summary>
+        public string Interval { set; get; }
     }
 }

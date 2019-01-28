@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Easycode.TimerService.Config
+namespace Easycode.TimerService
 {
     /// <summary>
     /// 指定任务配置
     /// </summary>
-    class SpecifyTaskMapConfig
+    public class SpecifyTaskMapConfig
     {
-
+        public List<TaskTriggerConfig> TaskTrigger { get; set; }
     }
 }

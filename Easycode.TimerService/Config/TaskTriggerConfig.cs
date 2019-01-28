@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Easycode.TimerService.Config
+namespace Easycode.TimerService
 {
     /// <summary>
-    /// 任务触发配置
+    /// 具体任务触发条件配置
     /// </summary>
-    class TaskTriggerConfig
+    public class TaskTriggerConfig
     {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public CrontabConfig Crontab { get; set; }
+
+        public CycleTaskConfig CycleTask { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace Easycode.TimerService
     public interface ITimerServiceFactory
     {
         Task<ITaskScheduler> GetScheduler(string dllName);
+
+        Task<ITaskScheduler> GetScheduler(string dllName, string fireFilePath);
     }
 }

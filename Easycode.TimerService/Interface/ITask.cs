@@ -15,6 +15,6 @@ namespace Easycode.TimerService
         /// 执行任务
         /// </summary>
         /// <returns></returns>
-        Task Execute(TaskExecutionContext context);
+        Task Execute(ITaskExecutionContext context);
     }
 }

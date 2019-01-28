@@ -14,13 +14,19 @@ namespace Easycode.TimerService
     /// </summary>
     public class TimerServiceFactory : ITimerServiceFactory
     {
-        public Task<ITaskScheduler> GetScheduler(string dllName)
+        public Task<ITaskScheduler> GetScheduler(string dllName, string fireFilePath)
         {
             ITaskScheduler ts = new TaskScheduler
             {
-                TaskProcessName = (dllName ?? string.Empty).Trim()
+                TaskProcessName = UtilHelper.ToTrim(dllName),
+                TaskFireFilePath = UtilHelper.ToTrim(fireFilePath)
             };
             return Task.FromResult(ts);
+        }
+
+        public Task<ITaskScheduler> GetScheduler(string dllName)
+        {
+            return GetScheduler(dllName, "TaskFire.config");
         }
     }
 }

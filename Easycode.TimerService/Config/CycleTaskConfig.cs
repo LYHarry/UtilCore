@@ -13,12 +13,12 @@ namespace Easycode.TimerService
         /// 重复执行次数
         /// <para> -1表示无限制重复执行 </para>
         /// </summary>
-        public int Count { get; set; }
+        public string RepeatCount { get; set; }
 
         /// <summary>
-        /// 重复间隔时间
+        /// 执行间隔时间
         /// <para>单位：秒</para>
         /// </summary>
-        public int Interval { get; set; }
+        public string Interval { get; set; }
     }
 }
