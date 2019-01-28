@@ -18,6 +18,6 @@ namespace Easycode.TimerService
 
         public object ExtraData { get; set; }
 
-        public DateTime LastFireTime { get; set; }
+        public DateTime? LastFireTime { get; set; }
     }
 }

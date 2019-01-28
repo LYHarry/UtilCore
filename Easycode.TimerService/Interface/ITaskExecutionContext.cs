@@ -24,7 +24,7 @@ namespace Easycode.TimerService
 
         object ExtraData { get; }
 
-        DateTime LastFireTime { get; }
+        DateTime? LastFireTime { get; }
 
     }
 }

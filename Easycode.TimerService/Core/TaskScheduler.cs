@@ -107,7 +107,7 @@ namespace Easycode.TimerService
                 // 判断任务触发条件
 
                 // 得到当前任务设置的触发条件
-                var triggerConfig = scheduleConfig.SpecifyTaskConfig.TaskTrigger.Where(p => p.Name == context.Name).FirstOrDefault();
+                var triggerConfig = scheduleConfig.SpecifyTaskConfig?.TaskTrigger?.Where(p => p.Name == context.Name).FirstOrDefault();
                 if (triggerConfig == null) //没有配置单个任务触发条件
                 {
                     triggerConfig = new TaskTriggerConfig()
@@ -138,7 +138,15 @@ namespace Easycode.TimerService
                         throw new ArgumentException("执行间隔时间设置出错");
                     if (execInterval < 1 || execInterval > long.MaxValue)
                         throw new ArgumentException("执行间隔时间设置出错");
-                    context.LastFireTime = DateTime.Now;
+                    //通过上次执行时间加上执行间隔秒数等于下次执行时间
+                    DateTime nextTime = DateTime.Now;
+                    if (context.LastFireTime.HasValue)
+                        nextTime = context.LastFireTime.Value.AddSeconds(execInterval);
+                    if (DateTime.Now < nextTime)
+                        throw new Exception($"未到执行{nextTime}时间");
+                    if (DateTime.Now > nextTime.AddSeconds(20)) // 充许20秒时差
+                        throw new Exception("执行时间已过");
+                    context.LastFireTime = nextTime;
                 }
                 if (triggerConfig.CycleTask == null) // 每天间隔任务
                 {
@@ -149,23 +157,28 @@ namespace Easycode.TimerService
                     if (execInterval < 0 || execInterval > int.MaxValue)
                         throw new ArgumentException("执行间隔时间设置出错");
 
-                    //通过上次执行时间加上执行间隔天数等天下次执行时间
-                    DateTime nextTime = context.LastFireTime.AddDays(execInterval);
-                    if (DateTime.Now < nextTime)
-                        throw new Exception("未到执行时间");
-                    if (DateTime.Now > nextTime.AddMinutes(20)) // 充许20分钟时差
-                        throw new Exception("执行时间已过");
-                    context.LastFireTime = nextTime;
+                    Console.WriteLine(DateTime.Now);
+
+                    if (context.LastFireTime.HasValue) //服务启动就执行一次
+                    {
+                        if (DateTime.Now.TimeOfDay == context.LastFireTime.Value.TimeOfDay)
+                            throw new Exception($"未到执行时间【{DateTime.Now.AddDays(execInterval).ToShortDateString()} {fireTime}】");
+                        if (!(DateTime.Now.TimeOfDay >= fireTime && fireTime <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(2))))
+                            throw new Exception($"未到执行时间【{DateTime.Now.ToShortDateString()} {fireTime}】");
+                    }
+                    context.LastFireTime = DateTime.Now;
+                    Console.WriteLine("上次执行时间:" + context.LastFireTime);
                 }
-                //当前任务执行次数加1
-                context.FireCount++;
-                //  创建具体的工作任务(JobTask)实例
-                ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
-                if (!(ci.Invoke(new object[0]) is ITask task))
-                    throw new Exception("实例必须为 ITask 派生类");
-                // 执行具体任务
-                task.Execute(context);
-                Thread.Sleep(2000);
+
+                ////当前任务执行次数加1
+                //context.FireCount++;
+                ////  创建具体的工作任务(JobTask)实例
+                //ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
+                //if (!(ci.Invoke(new object[0]) is ITask task))
+                //    throw new Exception("实例必须为 ITask 派生类");
+                //// 执行具体任务
+                //task.Execute(context);
+                Thread.Sleep(1000);
             }
             catch (Exception ex)
             {
