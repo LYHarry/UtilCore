@@ -32,7 +32,7 @@ namespace Easycode.TimerService
         /// <summary>
         /// 任务附加参数数据
         /// </summary>
-        [XmlElement(ElementName = "ExtraData")]
+        [XmlElement(ElementName = "ExtraData", Type = typeof(object))]
         public object ExtraData { get; set; }
     }
 }

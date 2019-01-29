@@ -204,7 +204,7 @@ namespace Easycode.TimerService
 
                 //当前任务执行次数加1
                 context.FireCount++;
-                context.ExtraData = triggerConfig.ExtraData;
+                //context.ExtraData = triggerConfig.ExtraData;
 
                 //创建具体的工作任务实例
                 ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
@@ -237,8 +237,6 @@ namespace Easycode.TimerService
             }
             return Task.CompletedTask;
         }
-
-
 
         /// <summary>
         /// 加载工作任务模块

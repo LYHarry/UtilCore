@@ -30,7 +30,6 @@
         <RepeatCount>重复执行次数(-1 表示无限循环执行)</RepeatCount>
         <Interval>执行间隔时间(以“秒”为单位)</Interval>
       </CycleTask>
-      <ExtraData>任务附加参数数据(object类型)</ExtraData>
     </TaskTrigger>
 
   <TaskTrigger>
@@ -44,7 +43,6 @@
         <RepeatCount>重复执行次数(-1 表示无限循环执行)</RepeatCount>
         <Interval>执行间隔时间(以“秒”为单位)</Interval>
       </CycleTask>
-      <ExtraData>任务附加参数数据(object类型)</ExtraData>
   </TaskTrigger>
 
   </SpecifyTaskConfig>
