@@ -7,6 +7,7 @@ namespace Easycode.TimerService
     /// <summary>
     /// 定时任务调试配置
     /// </summary>
+    [Serializable]
     public class CrontabConfig
     {
         public string FireTime { get; set; }

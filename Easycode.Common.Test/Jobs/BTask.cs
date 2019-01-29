@@ -11,7 +11,7 @@ namespace Easycode.Common.Test.Jobs
         public Task Execute(ITaskExecutionContext context)
         {
             Console.WriteLine($"执行{context.Name}任务，描述:{context.Description}，执行次数:{context.FireCount}");
-            return Task.FromResult(true);
+            throw new Exception("BTask.抛出自定义异常");
         }
 
         public void OnException(Exception ex)

@@ -84,7 +84,7 @@ namespace Easycode.TimerService
                 return sr.ReadToEnd();
             }
         }
-        
+
 
         /// <summary>
         /// 去掉两边空格
@@ -106,6 +106,7 @@ namespace Easycode.TimerService
         {
             stime = DateTime.Now;
             StringBuilder startLog = new StringBuilder();
+            startLog.AppendLine();
             startLog.AppendLine();
             startLog.Append("【开始】");
             startLog.Append(message + "。");
@@ -137,11 +138,27 @@ namespace Easycode.TimerService
         /// <param name="message">提示信息</param>
         internal static void RecordLog(string message)
         {
-            StringBuilder log = new StringBuilder();
-            log.AppendLine();
+            StringBuilder log = new StringBuilder();          
             log.Append(message + "。");
             log.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】");
             Console.WriteLine(log);
+        }
+
+
+        internal static bool IsEqualTime(DateTime dt1, DateTime dt2)
+        {
+            if (dt1.Year != dt2.Year)
+                return false;
+            if (dt1.Month != dt2.Month)
+                return false;
+            if (dt1.Day != dt2.Day)
+                return false;
+            if (dt1.Hour != dt2.Hour)
+                return false;
+            if (dt1.Minute != dt2.Minute)
+                return false;
+
+            return true;
         }
 
     }

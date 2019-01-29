@@ -36,10 +36,11 @@ namespace Easycode.TimerService
         {
             // 加载工作任务模块
             Task.Run(() => { LoadModules(TaskProcessName); }).Wait();
+            // 加载任务触发条件
+            Task.Run(() => { LoadTaskTriggerCondition(TaskFireFilePath); }).Wait();
+
             while (true)
             {
-                // 加载任务触发条件
-                Task.Run(() => { LoadTaskTriggerCondition(TaskFireFilePath); }).Wait();
                 if (TaskModules.Count > 0)
                 {
                     if (scheduleConfig == null)
@@ -89,7 +90,8 @@ namespace Easycode.TimerService
             UtilHelper.RecordStartLog($"执行【{jobTask.Name}】任务", out DateTime stime);
             try
             {
-                // 得到当前任务执行上下文
+                #region 得到任务执行上下文
+
                 TaskExecutionContext context = null;
                 if (execContextDict.ContainsKey(jobTask.Name))
                     context = execContextDict[jobTask.Name];
@@ -99,12 +101,13 @@ namespace Easycode.TimerService
                     {
                         Name = jobTask.Name,
                         Description = UtilHelper.Description(jobTask),
-                        Result = null,
-                        Interval = 0,
                     };
                     execContextDict.Add(jobTask.Name, context);
                 }
-                // 判断任务触发条件
+
+                #endregion
+
+                #region 判断任务触发条件
 
                 // 得到当前任务设置的触发条件
                 var triggerConfig = scheduleConfig.SpecifyTaskConfig?.TaskTrigger?.Where(p => p.Name == context.Name).FirstOrDefault();
@@ -121,9 +124,14 @@ namespace Easycode.TimerService
                         }
                     };
                 }
+                if (string.IsNullOrWhiteSpace(triggerConfig.Crontab?.FireTime))
+                    triggerConfig.Crontab = null;
+                if (string.IsNullOrWhiteSpace(triggerConfig.CycleTask?.RepeatCount))
+                    triggerConfig.CycleTask = null;
                 if (triggerConfig.Crontab == null && triggerConfig.CycleTask == null)
                     throw new Exception($"未设置触发条件");
-                if (triggerConfig.Crontab == null) // 循环任务
+                // 循环任务
+                if (triggerConfig.Crontab == null)
                 {
                     if (!int.TryParse(triggerConfig.CycleTask.RepeatCount, out int execCount))
                         throw new ArgumentException("重复执行次数设置出错");
@@ -132,23 +140,25 @@ namespace Easycode.TimerService
                         if (execCount < 0)
                             throw new ArgumentException("重复执行次数设置出错");
                         if (context.FireCount >= execCount)
-                            throw new ArgumentException($"已重复执行{execCount}次，无需再次执行");
+                            throw new ArgumentException($"已重复执行【{execCount}】次，无需再次执行");
                     }
                     if (!long.TryParse(triggerConfig.CycleTask.Interval, out long execInterval))
                         throw new ArgumentException("执行间隔时间设置出错");
                     if (execInterval < 1 || execInterval > long.MaxValue)
                         throw new ArgumentException("执行间隔时间设置出错");
-                    //通过上次执行时间加上执行间隔秒数等于下次执行时间
-                    DateTime nextTime = DateTime.Now;
                     if (context.LastFireTime.HasValue)
-                        nextTime = context.LastFireTime.Value.AddSeconds(execInterval);
-                    if (DateTime.Now < nextTime)
-                        throw new Exception($"未到执行{nextTime}时间");
-                    if (DateTime.Now > nextTime.AddSeconds(20)) // 充许20秒时差
-                        throw new Exception("执行时间已过");
-                    context.LastFireTime = nextTime;
+                    {
+                        var currTime = DateTime.Now;
+                        var execTime = context.LastFireTime.Value.AddSeconds(execInterval);
+                        if (!UtilHelper.IsEqualTime(currTime, execTime))
+                            throw new Exception($"未到执行时间【{execTime}】");
+                        if (!(currTime.Second >= execTime.Second && currTime.Second <= (execTime.Second + 10)))
+                            throw new Exception($"未到执行时间【{execTime}】"); //充许10秒时差
+                    }
+                    context.LastFireTime = DateTime.Now;
                 }
-                if (triggerConfig.CycleTask == null) // 每天间隔任务
+                // 每天间隔任务
+                if (triggerConfig.CycleTask == null)
                 {
                     if (!TimeSpan.TryParse(triggerConfig.Crontab.FireTime, out TimeSpan fireTime))
                         throw new ArgumentException("执行时间设置出错");
@@ -156,34 +166,55 @@ namespace Easycode.TimerService
                         throw new ArgumentException("执行间隔时间设置出错");
                     if (execInterval < 0 || execInterval > int.MaxValue)
                         throw new ArgumentException("执行间隔时间设置出错");
-
-                    Console.WriteLine(DateTime.Now);
-
-                    if (context.LastFireTime.HasValue) //服务启动就执行一次
+                    //服务启动就执行一次
+                    if (context.LastFireTime.HasValue)
                     {
-                        if (DateTime.Now.TimeOfDay == context.LastFireTime.Value.TimeOfDay)
-                            throw new Exception($"未到执行时间【{DateTime.Now.AddDays(execInterval).ToShortDateString()} {fireTime}】");
-                        if (!(DateTime.Now.TimeOfDay >= fireTime && fireTime <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(2))))
-                            throw new Exception($"未到执行时间【{DateTime.Now.ToShortDateString()} {fireTime}】");
+                        var currTime = DateTime.Now.TimeOfDay;// 充许1分钟时差
+                        if (currTime.Hours != fireTime.Hours || currTime.Minutes != fireTime.Minutes)
+                            throw new Exception($"未到执行时间【{fireTime}】");
+                        var lastExecTime = context.LastFireTime.Value.TimeOfDay;
+                        if (lastExecTime.Hours == currTime.Hours && lastExecTime.Minutes == currTime.Minutes)
+                        {
+                            var execDate = context.LastFireTime.Value.AddDays(execInterval).Date;
+                            if (execDate != DateTime.Now.Date)
+                                throw new Exception($"未到执行时间【{execDate.ToShortDateString()} {fireTime}】");
+                        }
+                        //else 表示上次不是在指定时间执行的，仍然执行一次
                     }
                     context.LastFireTime = DateTime.Now;
-                    Console.WriteLine("上次执行时间:" + context.LastFireTime);
                 }
 
-                ////当前任务执行次数加1
-                //context.FireCount++;
-                ////  创建具体的工作任务(JobTask)实例
-                //ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
-                //if (!(ci.Invoke(new object[0]) is ITask task))
-                //    throw new Exception("实例必须为 ITask 派生类");
-                //// 执行具体任务
-                //task.Execute(context);
-                Thread.Sleep(1000);
+                #endregion
+
+                #region 执行具体任务
+
+                //当前任务执行次数加1
+                context.FireCount++;
+
+                //创建具体的工作任务(JobTask)实例
+                ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
+                if (!(ci.Invoke(new object[0]) is ITask task))
+                    throw new Exception("实例必须为 ITask 派生类");
+                try
+                {
+                    // 执行具体任务
+                    task.Execute(context);
+                }
+                catch (Exception ex)
+                {
+                    if (task is IJobTask extask)
+                    {
+                        extask.OnException(new Exception($"执行【{jobTask.Name}】任务出错", ex));
+                        return Task.CompletedTask;
+                    }
+                    UtilHelper.RecordLog($"执行【{jobTask.Name}】任务出错：此任务{ex.Message}");
+                }
+
+                #endregion
             }
             catch (Exception ex)
             {
-                UtilHelper.RecordLog($"执行【{jobTask.Name}】任务出错：此任务{ex.Message}");
-                Thread.Sleep(3000);
+                UtilHelper.RecordLog($"【{jobTask.Name}】任务{ex.Message}");
             }
             finally
             {
@@ -230,10 +261,6 @@ namespace Easycode.TimerService
             }
             return Task.CompletedTask;
         }
-
-
-
-
 
         /// <summary>
         /// 加载任务触发条件

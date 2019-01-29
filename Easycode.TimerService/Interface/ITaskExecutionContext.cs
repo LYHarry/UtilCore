@@ -19,9 +19,7 @@ namespace Easycode.TimerService
         object Result { get; set; }
 
         int FireCount { get; }
-
-        int Interval { get; }
-
+        
         object ExtraData { get; }
 
         DateTime? LastFireTime { get; }

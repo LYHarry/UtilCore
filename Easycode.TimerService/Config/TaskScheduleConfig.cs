@@ -7,6 +7,7 @@ namespace Easycode.TimerService
     /// <summary>
     /// 任务计划安排配置
     /// </summary>
+    [Serializable]
     public class TaskScheduleConfig
     {
         public string FireTime { get; set; }

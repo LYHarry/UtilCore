@@ -7,6 +7,7 @@ namespace Easycode.TimerService
     /// <summary>
     /// 循环任务调度配置
     /// </summary>
+    [Serializable]
     public class CycleTaskConfig
     {
         /// <summary>

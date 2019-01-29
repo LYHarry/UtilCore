@@ -2,6 +2,8 @@
 基于 .NET Standard 2.0 开发的定时任务类库
 
 # 使用方法
+   1. 所有工作任务类都必须继承 ITask 或 IJobTask 接口。如果需要处理工作任务抛出的异常信息，则继承 IJobTask 接口。  <br />
+   2. 调用方式
    ITimerServiceFactory factory = new TimerServiceFactory(); <br />
    ITaskScheduler task = await factory.GetScheduler("工作任务所在的项目名称","任务触发条件的配置文件名称"); <br />
    await task.Start();
@@ -19,7 +21,7 @@
   <SpecifyTaskConfig>
     <TaskTrigger>
       <Name>任务类名1</Name>
-      <Description>任务描述</Description>
+      <Description>任务描述(获取工作任务类的 DescriptionAttribute 特性内容)</Description>
       <Crontab>
         <FireTime>执行时间(时分秒格式，如：00:00:00)</FireTime>
         <Interval>执行间隔时间(以“天”为单位)</Interval>
@@ -32,7 +34,7 @@
 
   <TaskTrigger>
       <Name>任务类名2</Name>
-      <Description>任务描述</Description>
+      <Description>任务描述(获取工作任务类的 DescriptionAttribute 特性内容)</Description>
       <Crontab>
         <FireTime>执行时间(时分秒格式，如：00:00:00)</FireTime>
         <Interval>执行间隔时间(以“天”为单位)</Interval>
