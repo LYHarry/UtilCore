@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Easycode.TimerService
 {
     /// <summary>
-    /// 循环任务调度配置
+    /// 循环任务触发条件配置
     /// </summary>
     [Serializable]
     public class CycleTaskConfig
     {
         /// <summary>
         /// 重复执行次数
-        /// <para> -1表示无限制重复执行 </para>
+        /// <para>-1 表示无限制重复执行</para>
         /// </summary>
         public string RepeatCount { get; set; }
 

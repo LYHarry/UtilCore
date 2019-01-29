@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Easycode.TimerService
 {
     /// <summary>
-    /// 定时任务调试配置
+    /// 定时周期任务触发条件配置
     /// </summary>
     [Serializable]
     public class CrontabConfig
     {
+        /// <summary>
+        /// 任务执行时间(00:00:00)
+        /// <para>TimeSpan 时分秒格式</para>
+        /// </summary>
         public string FireTime { get; set; }
 
         /// <summary>

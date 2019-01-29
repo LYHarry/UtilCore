@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Easycode.TimerService
 {
@@ -99,6 +100,54 @@ namespace Easycode.TimerService
         public static void TraceException(string message, Exception exception, params object[] formatParams)
         {
             _log.Log(LogLevel.Trace, message, exception, formatParams);
+        }
+
+
+        /// <summary>
+        /// 记录程序开始的日志
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        /// <param name="stime">返回当前开始时间</param>
+        internal static void RecordStartLog(string message, out DateTime stime)
+        {
+            stime = DateTime.Now;
+            StringBuilder startLog = new StringBuilder();
+            startLog.AppendLine();
+            startLog.AppendLine();
+            startLog.Append("【开始】");
+            startLog.Append(message + "。");
+            startLog.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】,");
+            startLog.Append($"当前时间:【{stime}】");
+            Console.WriteLine(startLog);
+        }
+
+
+        /// <summary>
+        /// 记录程序结束的日志
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        /// <param name="startTime">程序开始的时间</param>
+        internal static void RecordEndLog(string message, DateTime startTime)
+        {
+            StringBuilder endLog = new StringBuilder();
+            endLog.Append("【结束】");
+            endLog.Append(message + "。");
+            endLog.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】,");
+            endLog.Append($"当前时间:【{DateTime.Now}】,");
+            endLog.Append($"运行时间:【{(DateTime.Now - startTime).TotalMilliseconds}毫秒】");
+            Console.WriteLine(endLog);
+        }
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        internal static void RecordLog(string message)
+        {
+            StringBuilder log = new StringBuilder();
+            log.Append(message + "。");
+            log.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】");
+            Console.WriteLine(log);
         }
 
     }

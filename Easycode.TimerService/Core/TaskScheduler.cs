@@ -1,21 +1,31 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Easycode.TimerService
 {
+    /// <summary>
+    /// 任务调度器
+    /// </summary>
     public class TaskScheduler : ITaskScheduler
     {
+        /// <summary>
+        /// 所有的工作任务模块
+        /// </summary>
         private List<Type> TaskModules { get; set; } = new List<Type>();
+
+        /// <summary>
+        /// 工作任务触发条件配置
+        /// </summary>
         private TaskScheduleConfig scheduleConfig;
+
+        /// <summary>
+        /// 工作任务执行上下文
+        /// </summary>
         private Dictionary<string, TaskExecutionContext> execContextDict = new Dictionary<string, TaskExecutionContext>();
 
         /// <summary>
@@ -24,28 +34,27 @@ namespace Easycode.TimerService
         public string TaskProcessName { get; set; }
 
         /// <summary>
-        /// 任务触发配置文件路径
+        /// 任务触发配置文件名称
         /// </summary>
-        public string TaskFireFilePath { get; set; }
+        public string TaskFireFileName { get; set; }
 
         /// <summary>
-        /// 开始
+        /// 开始执行任务
         /// </summary>
         /// <returns></returns>
         public Task Start()
         {
             // 加载工作任务模块
             Task.Run(() => { LoadModules(TaskProcessName); }).Wait();
-            // 加载任务触发条件
-            Task.Run(() => { LoadTaskTriggerCondition(TaskFireFilePath); }).Wait();
-
             while (true)
             {
+                // 加载任务触发条件
+                Task.Run(() => { LoadTaskTriggerCondition(TaskFireFileName); }).Wait();
                 if (TaskModules.Count > 0)
                 {
                     if (scheduleConfig == null)
                     {
-                        UtilHelper.RecordLog("未加载到任务触发条件，等待1秒");
+                        LogHelper.RecordLog("未加载到任务触发条件，等待1秒");
                         Thread.Sleep(1000);
                         continue;
                     }
@@ -56,13 +65,13 @@ namespace Easycode.TimerService
                     }
                     continue;
                 }
-                UtilHelper.RecordLog("没有需要执行的任务，等待1秒");
+                LogHelper.RecordLog("没有需要执行的任务，等待1秒");
                 Thread.Sleep(1000);
             }
         }
 
         /// <summary>
-        /// 停止
+        /// 停止所有任务
         /// </summary>
         /// <returns></returns>
         public Task Stop()
@@ -71,7 +80,11 @@ namespace Easycode.TimerService
             return Task.CompletedTask;
         }
 
-
+        /// <summary>
+        /// 停止某个任务
+        /// </summary>
+        /// <param name="taskName">待停止的任务名称</param>
+        /// <returns></returns>
         public Task Stop(string taskName)
         {
             var task = TaskModules.Where(p => p.Name == taskName).FirstOrDefault();
@@ -81,13 +94,13 @@ namespace Easycode.TimerService
         }
 
         /// <summary>
-        /// 执行任务
+        /// 执行具体任务
         /// </summary>
         /// <param name="jobTask"></param>
         /// <returns></returns>
         private Task ExecuteTask(Type jobTask)
         {
-            UtilHelper.RecordStartLog($"执行【{jobTask.Name}】任务", out DateTime stime);
+            LogHelper.RecordStartLog($"执行【{jobTask.Name}】任务", out DateTime stime);
             try
             {
                 #region 得到任务执行上下文
@@ -156,6 +169,7 @@ namespace Easycode.TimerService
                             throw new Exception($"未到执行时间【{execTime}】"); //充许10秒时差
                     }
                     context.LastFireTime = DateTime.Now;
+
                 }
                 // 每天间隔任务
                 if (triggerConfig.CycleTask == null)
@@ -190,8 +204,9 @@ namespace Easycode.TimerService
 
                 //当前任务执行次数加1
                 context.FireCount++;
+                context.ExtraData = triggerConfig.ExtraData;
 
-                //创建具体的工作任务(JobTask)实例
+                //创建具体的工作任务实例
                 ConstructorInfo ci = jobTask.GetConstructor(Type.EmptyTypes);
                 if (!(ci.Invoke(new object[0]) is ITask task))
                     throw new Exception("实例必须为 ITask 派生类");
@@ -207,18 +222,18 @@ namespace Easycode.TimerService
                         extask.OnException(new Exception($"执行【{jobTask.Name}】任务出错", ex));
                         return Task.CompletedTask;
                     }
-                    UtilHelper.RecordLog($"执行【{jobTask.Name}】任务出错：此任务{ex.Message}");
+                    LogHelper.RecordLog($"执行【{jobTask.Name}】任务出错：此任务{ex.Message}");
                 }
 
                 #endregion
             }
             catch (Exception ex)
             {
-                UtilHelper.RecordLog($"【{jobTask.Name}】任务{ex.Message}");
+                LogHelper.RecordLog($"【{jobTask.Name}】任务{ex.Message}");
             }
             finally
             {
-                UtilHelper.RecordEndLog($"执行【{jobTask.Name}】任务", stime);
+                LogHelper.RecordEndLog($"执行【{jobTask.Name}】任务", stime);
             }
             return Task.CompletedTask;
         }
@@ -232,7 +247,7 @@ namespace Easycode.TimerService
         /// <returns></returns>
         private Task LoadModules(string dllName)
         {
-            UtilHelper.RecordStartLog($"加载【{dllName}】项目下工作任务", out DateTime stime);
+            LogHelper.RecordStartLog($"加载【{dllName}】项目下工作任务", out DateTime stime);
             try
             {
                 var dir = AppDomain.CurrentDomain.BaseDirectory;
@@ -253,11 +268,11 @@ namespace Easycode.TimerService
             }
             catch (Exception ex)
             {
-                UtilHelper.RecordLog($"加载工作任务出错：{ex.Message}");
+                LogHelper.RecordLog($"加载工作任务出错：{ex.Message}");
             }
             finally
             {
-                UtilHelper.RecordEndLog("加载工作任务", stime);
+                LogHelper.RecordEndLog("加载工作任务", stime);
             }
             return Task.CompletedTask;
         }
@@ -265,30 +280,30 @@ namespace Easycode.TimerService
         /// <summary>
         /// 加载任务触发条件
         /// </summary>
-        /// <param name="filePath">任务触发条件配置文件路径</param>
+        /// <param name="fileName">任务触发条件配置文件名称</param>
         /// <returns></returns>
-        private Task LoadTaskTriggerCondition(string filePath)
+        private Task LoadTaskTriggerCondition(string fileName)
         {
-            UtilHelper.RecordStartLog("加载任务触发条件", out DateTime stime);
+            LogHelper.RecordStartLog("加载任务触发条件", out DateTime stime);
             try
             {
-                if (string.IsNullOrWhiteSpace(filePath))
+                if (string.IsNullOrWhiteSpace(fileName))
                     throw new ArgumentNullException("未设置任务触发条件配置文件名");
-                filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
-                if (!File.Exists(filePath))
-                    throw new FileNotFoundException("未创建任务触发配置文件", filePath);
-                string xml = UtilHelper.LoadFile(filePath);
+                fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+                if (!File.Exists(fileName))
+                    throw new FileNotFoundException("未创建任务触发配置文件", fileName);
+                string xml = UtilHelper.LoadFile(fileName);
                 scheduleConfig = UtilHelper.Deserialize<TaskScheduleConfig>(xml);
                 if (scheduleConfig == null)
                     throw new FileLoadException("任务触发配置文件序列化失败");
             }
             catch (Exception ex)
             {
-                UtilHelper.RecordLog($"加载任务配置文件出错：{ex.Message}");
+                LogHelper.RecordLog($"加载任务配置文件出错：{ex.Message}");
             }
             finally
             {
-                UtilHelper.RecordEndLog("加载任务触发条件", stime);
+                LogHelper.RecordEndLog("加载任务触发条件", stime);
             }
             return Task.CompletedTask;
         }

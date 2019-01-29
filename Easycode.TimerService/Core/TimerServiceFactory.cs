@@ -1,29 +1,33 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Easycode.TimerService
 {
     /// <summary>
-    /// 定时器服务工厂实现类
+    /// 定时器服务工厂
     /// </summary>
     public class TimerServiceFactory : ITimerServiceFactory
     {
-        public Task<ITaskScheduler> GetScheduler(string dllName, string fireFilePath)
+        /// <summary>
+        /// 得到工作任务调度器
+        /// </summary>
+        /// <param name="dllName">工作任务所在的项目名称</param>
+        /// <param name="fireFileName">触发条件配置文件名称</param>
+        /// <returns></returns>
+        public Task<ITaskScheduler> GetScheduler(string dllName, string fireFileName)
         {
             ITaskScheduler ts = new TaskScheduler
             {
                 TaskProcessName = UtilHelper.ToTrim(dllName),
-                TaskFireFilePath = UtilHelper.ToTrim(fireFilePath)
+                TaskFireFileName = UtilHelper.ToTrim(fireFileName)
             };
             return Task.FromResult(ts);
         }
 
+        /// <summary>
+        /// 得到工作任务调度器
+        /// </summary>
+        /// <param name="dllName">工作任务所在的项目名称</param>
+        /// <returns></returns>
         public Task<ITaskScheduler> GetScheduler(string dllName)
         {
             return GetScheduler(dllName, "TaskFire.config");

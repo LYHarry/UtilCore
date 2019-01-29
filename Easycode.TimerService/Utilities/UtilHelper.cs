@@ -9,6 +9,9 @@ using System.Xml.Serialization;
 
 namespace Easycode.TimerService
 {
+    /// <summary>
+    /// 工具助手类
+    /// </summary>
     internal class UtilHelper
     {
         /// <summary>
@@ -43,9 +46,8 @@ namespace Easycode.TimerService
             return result;
         }
 
-
         /// <summary>
-        /// 得到枚举 DescriptionAttribute 特性内容
+        /// 得到 DescriptionAttribute 特性内容
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -58,7 +60,6 @@ namespace Easycode.TimerService
                 return string.Empty;
             return text;
         }
-
 
         /// <summary>
         /// 反序列化
@@ -75,7 +76,11 @@ namespace Easycode.TimerService
             }
         }
 
-
+        /// <summary>
+        /// 读取文件内容
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns></returns>
         internal static string LoadFile(string filePath)
         {
             using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
@@ -84,7 +89,6 @@ namespace Easycode.TimerService
                 return sr.ReadToEnd();
             }
         }
-
 
         /// <summary>
         /// 去掉两边空格
@@ -96,55 +100,13 @@ namespace Easycode.TimerService
             return (content ?? "").Trim();
         }
 
-
         /// <summary>
-        /// 记录程序开始的日志
+        /// 判断两个时间是否相等
+        /// <para>不判断秒和毫秒</para>
         /// </summary>
-        /// <param name="message">提示信息</param>
-        /// <param name="stime">返回当前开始时间</param>
-        internal static void RecordStartLog(string message, out DateTime stime)
-        {
-            stime = DateTime.Now;
-            StringBuilder startLog = new StringBuilder();
-            startLog.AppendLine();
-            startLog.AppendLine();
-            startLog.Append("【开始】");
-            startLog.Append(message + "。");
-            startLog.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】,");
-            startLog.Append($"当前时间:【{stime}】");
-            Console.WriteLine(startLog);
-        }
-
-
-        /// <summary>
-        /// 记录程序结束的日志
-        /// </summary>
-        /// <param name="message">提示信息</param>
-        /// <param name="startTime">程序开始的时间</param>
-        internal static void RecordEndLog(string message, DateTime startTime)
-        {
-            StringBuilder endLog = new StringBuilder();
-            endLog.Append("【结束】");
-            endLog.Append(message + "。");
-            endLog.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】,");
-            endLog.Append($"当前时间:【{DateTime.Now}】,");
-            endLog.Append($"运行时间:【{(DateTime.Now - startTime).TotalMilliseconds}毫秒】");
-            Console.WriteLine(endLog);
-        }
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">提示信息</param>
-        internal static void RecordLog(string message)
-        {
-            StringBuilder log = new StringBuilder();          
-            log.Append(message + "。");
-            log.Append($"当前线程ID:【{Thread.CurrentThread.ManagedThreadId}】");
-            Console.WriteLine(log);
-        }
-
-
+        /// <param name="dt1">时间1</param>
+        /// <param name="dt2">时间2</param>
+        /// <returns></returns>
         internal static bool IsEqualTime(DateTime dt1, DateTime dt2)
         {
             if (dt1.Year != dt2.Year)
